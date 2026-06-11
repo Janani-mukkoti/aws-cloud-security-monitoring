@@ -1,0 +1,66 @@
+###############################################################################
+# Example variable values for the AWS Cloud Security Monitoring Lab.
+#
+# Usage:
+#   cp terraform.tfvars.example terraform.tfvars
+#   # edit terraform.tfvars with your values
+#
+# NEVER commit a real terraform.tfvars containing secrets. The .gitignore in
+# this repo already excludes *.tfvars (this *.example file is the exception).
+###############################################################################
+
+# ---- Required -------------------------------------------------------------
+
+# Email address that will receive every security alert. After `apply`, AWS sends
+# a confirmation email; you MUST click the link before alerts are delivered.
+alarm_email = "security-team@example.com"
+
+# ---- Common (have sensible defaults; override if desired) -----------------
+
+# Region to deploy into. The trail is multi-region regardless of this value.
+aws_region = "us-east-1"
+
+# Short, lowercase, S3-safe name used to prefix and tag all resources.
+project_name = "cloud-security-monitoring"
+
+# Environment label used in names and tags (e.g. dev / staging / prod).
+environment = "prod"
+
+# Extra tags merged onto every resource (great for cost allocation / ownership).
+tags = {
+  Owner     = "Janani Mukkoti"
+  CostCenter = "security"
+}
+
+# ---- Optional: Slack ------------------------------------------------------
+
+# Slack Incoming Webhook URL. Leave empty to disable Slack notifications.
+# This is a SECRET. Prefer exporting it instead of putting it in this file:
+#   export TF_VAR_slack_webhook_url="https://hooks.slack.com/services/XXX/YYY/ZZZ"
+# slack_webhook_url = ""
+
+# ---- Optional: retention / lifecycle tuning -------------------------------
+
+# How long to keep CloudTrail logs in S3 before deletion.
+s3_log_expiration_days = 365
+
+# Days before current objects move to the cheaper STANDARD_IA storage class.
+s3_transition_to_ia_days = 90
+
+# Days before non-current (overwritten/deleted) versions are removed.
+s3_noncurrent_version_expiration_days = 90
+
+# CloudWatch Logs retention for the CloudTrail log group (must be a CW Logs value).
+cloudwatch_log_retention_days = 90
+
+# CloudWatch Logs retention for the Lambda's own logs.
+lambda_log_retention_days = 30
+
+# ---- Optional: alarm behaviour --------------------------------------------
+
+# Evaluation period (seconds) and number of periods for each alarm.
+alarm_period_seconds     = 300
+alarm_evaluation_periods = 1
+
+# Python runtime for the alerting Lambda.
+lambda_runtime = "python3.12"

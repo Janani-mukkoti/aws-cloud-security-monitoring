@@ -1,0 +1,27 @@
+%% AWS Cloud Security Monitoring Lab - architecture
+%% Render with the Mermaid CLI or any Mermaid-aware viewer:
+%%   mmdc -i diagrams/architecture.mmd -o diagrams/architecture.png
+%% This source is kept identical to the diagram embedded in README.md.
+flowchart LR
+    API["AWS API activity<br/>all regions + global services"]
+
+    subgraph aws["AWS account"]
+        CT["CloudTrail<br/>multi-region + log-file validation"]
+        S3[("S3 bucket<br/>versioned · encrypted<br/>private · lifecycle")]
+        CWL["CloudWatch Logs<br/>log group"]
+        MF["Metric filters<br/>7 detections"]
+        AL["CloudWatch alarms"]
+        LMB["Lambda<br/>parse + format alert"]
+        SNS{{"SNS topic<br/>security-alerts"}}
+    end
+
+    EMAIL["Email inbox"]
+    SLACK["Slack channel<br/>(optional)"]
+
+    API --> CT
+    CT -->|deliver logs| S3
+    CT -->|stream events| CWL
+    CWL --> MF --> AL -->|notify| SNS
+    CWL -->|subscription filter| LMB -->|publish| SNS
+    LMB -.optional.-> SLACK
+    SNS -->|email subscription| EMAIL

@@ -1,0 +1,66 @@
+# ---------------------------------------------------------------------------
+# Terraform
+# ---------------------------------------------------------------------------
+# Local .terraform directories and provider plugins
+**/.terraform/*
+.terraform.lock.hcl
+
+# State files (may contain secrets) - never commit
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Variable files that may contain secrets. The committed example is allowed.
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Plan output / overrides
+*.tfplan
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Lambda build artifact produced by archive_file
+terraform/build/
+*.zip
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.eggs/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------------------------------------------------------------------------
+# Node
+# ---------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ---------------------------------------------------------------------------
+# OS / editor
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# ---------------------------------------------------------------------------
+# Secrets / credentials (defense in depth - never commit these)
+# ---------------------------------------------------------------------------
+*.pem
+.env
+.env.*
