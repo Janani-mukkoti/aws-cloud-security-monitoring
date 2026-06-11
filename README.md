@@ -1,17 +1,4 @@
-# AWS Cloud Security Monitoring Lab
 
-Automated, **infrastructure-as-code** cloud security monitoring for AWS. A
-multi-region **CloudTrail** captures API activity across the account and streams
-it to **CloudWatch Logs**, where seven CIS-aligned metric filters and alarms
-detect suspicious activity (root usage, unauthorized calls, security-group /
-network / IAM / S3 changes, and console logins without MFA). Alarms and a Python
-**Lambda** that formats human-readable alerts both publish to an **SNS** topic
-that notifies you by email (and optionally Slack). Everything is defined in
-Terraform so you can stand it up — and tear it down — in minutes.
-
-> **Build-only repo:** this project contains complete, production-quality code
-> and docs. It does **not** deploy anything on its own; you apply it with your
-> own AWS credentials. See [`docs/deployment.md`](docs/deployment.md).
 
 ## Architecture
 
@@ -41,7 +28,7 @@ flowchart LR
     SNS -->|email subscription| EMAIL
 ```
 
-The Mermaid source lives in [`diagrams/architecture.mmd`](diagrams/architecture.mmd).
+
 
 ## Skills / Tech
 
@@ -110,9 +97,7 @@ terraform plan
 terraform apply
 ```
 
-Then **confirm the SNS subscription email** AWS sends to your address — alerts
-are not delivered until you do. Full walkthrough, including a safe end-to-end
-test, is in [`docs/deployment.md`](docs/deployment.md).
+
 
 ## Teardown / Cleanup
 
@@ -129,26 +114,7 @@ aws s3 rm "s3://$(terraform output -raw cloudtrail_s3_bucket)" --recursive
 terraform destroy
 ```
 
-## Cost notes
 
-Low-cost but **not** guaranteed free. Main line items: CloudWatch Logs ingestion
-(~$0.50/GB), CloudWatch alarms (~$0.10/alarm/month × 7), small S3 storage, and
-negligible Lambda/SNS usage. Expect well under a few USD/month for a quiet
-account. Run `terraform destroy` when finished. Details in
-[`docs/deployment.md`](docs/deployment.md#cost-notes).
-
-## Security notes
-
-* No secrets are committed. Copy `terraform.tfvars.example` → `terraform.tfvars`
-  (git-ignored) and pass the Slack webhook via `TF_VAR_slack_webhook_url`.
-* IAM follows least privilege; the S3 bucket is fully private with a TLS-only,
-  confused-deputy-protected policy.
-* KMS / SNS-SSE upgrade paths are documented in
-  [`docs/detections.md`](docs/detections.md#hardening--production-enhancements).
-
-## Resume bullet
-
-> Implemented automated cloud security monitoring using AWS CloudTrail, CloudWatch, Lambda, and SNS to detect and alert on suspicious activities.
 
 ## License
 
